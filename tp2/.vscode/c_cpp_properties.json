@@ -6,12 +6,9 @@
         "${workspaceFolder}/**"
       ],
       "compilerPath": "cl.exe",
-      "cStandard": "${default}",
+      "cStandard": "c11",
       "cppStandard": "${default}",
-      "intelliSenseMode": "windows-msvc-x64",
-      "compilerArgs": [
-        ""
-      ]
+      "intelliSenseMode": "windows-msvc-x64"
     }
   ],
   "version": 4

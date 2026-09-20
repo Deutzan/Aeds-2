@@ -5,27 +5,25 @@
       "type": "java",
       "name": "Q1",
       "request": "launch",
+      "mainClass": "Javinha.Q1",
+      "projectName": "tp2_5ab95e09"
+    },
+    {
+      "type": "java",
+      "name": "Q1",
+      "request": "launch",
       "mainClass": "Q1",
       "projectName": "tp2_7e3621cc"
     },
     {
       "name": "C/C++ Runner: Debug Session",
-      "type": "cppdbg",
+      "type": "cppvsdbg",
       "request": "launch",
       "args": [],
       "stopAtEntry": false,
-      "externalConsole": true,
-      "cwd": "c:/Users/WazPc/Documents/GitHub/tp2",
-      "program": "c:/Users/WazPc/Documents/GitHub/tp2/build/Debug/outDebug",
-      "MIMode": "gdb",
-      "miDebuggerPath": "gdb",
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
-      ]
+      "console": "externalTerminal",
+      "cwd": ".",
+      "program": "build/Debug/outDebug"
     }
   ]
 }
