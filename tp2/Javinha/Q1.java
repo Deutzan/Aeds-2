@@ -8,7 +8,7 @@ public class Q1 {
     public static void main(String[] args) {
 
         //-- Lê todos os veículos do arquivo CSV --//
-        Veiculo[] veiculos = LerCSV.ler("veiculos.csv");
+        Veiculo[] veiculos = LerCSV.ler("javinha/veiculos.csv");
 
         Scanner scan = new Scanner(System.in);
         int idProcurado;
@@ -33,16 +33,16 @@ public class Q1 {
 //lerCSV
 class LerCSV {
 
+
+
+
     public static Veiculo[] ler(String carro) {
 
-        //-- vetor para armazenar os veículos --//
         Veiculo[] veiculos = new Veiculo[501];
 
-        //-- Variável que indica quantos veículos já foram lidos --//
         int quantidade = 0;
 
         try {
-
             // Abre o arquivo para leitura.
             BufferedReader arquivo = new BufferedReader(new FileReader(carro));
 
@@ -50,75 +50,41 @@ class LerCSV {
 
             String linha;
 
-            //-- vai ler enquanto existir uma linha para ler --//
-            while ((linha = arquivo.readLine()) != null) {//while != EOF
-                
-                String[] dados = linha.split(",");
+            while ((linha = arquivo.readLine()) != null) {
+   
+                // ParseVeiculo transforma a linha em um objeto Veiculo
+                Veiculo veiculo = Veiculo.ParseVeiculo(linha);
 
-                //-- converte os dados --//
-
-                int id = Integer.parseInt(dados[0]);
-                String marca = dados[1];
-                String modelo = dados[2];
-                int ano = Integer.parseInt(dados[3]);
-                String categoria = dados[4];
-                String combustivel = dados[5];
-                int cilindros = Integer.parseInt(dados[6]);
-                float cilindrada = Float.parseFloat(dados[7]);
-                String transmissao = dados[8];
-                String tracao = dados[9];
-                float consumoCidade = Float.parseFloat(dados[10]);
-                float consumoEstrada = Float.parseFloat(dados[11]);
-                float co2 = Float.parseFloat(dados[12]);
-                boolean turbo = Boolean.parseBoolean(dados[13]);
-
-                //-- DATA --//
-                String[] data = dados[14].split("-");
-                int anoData = Integer.parseInt(data[0]);
-                int mesData = Integer.parseInt(data[1]);
-                int diaData = Integer.parseInt(data[2]);
-
-                /* Cria o objeto Data.*/
-                Data dataRegistro = new Data(anoData,mesData,diaData);
-
-                //-- criao objeto veiculo --//
-                Veiculo veiculo = new Veiculo(id,marca,modelo,ano,categoria,combustivel,cilindros,cilindrada,transmissao,tracao,consumoCidade,consumoEstrada,co2,turbo,dataRegistro
-                );
-
-                // Coloca o objeto Veiculo dentro do vetor.
                 veiculos[quantidade] = veiculo;
 
-                // Passa para a próxima posição.
                 quantidade++;
             }
 
-            // Fecha o arquivo depois de terminar a leitura.
             arquivo.close();
 
         } catch (Exception e) {
 
-            // Caso aconteça algum erro durante a leitura.
             System.out.println("Erro ao ler o arquivo.");
+            e.printStackTrace(); //--> recomendação para caso caia na exceção ele mostre oque esta realmente acontecendo --//
         }
 
-        // Retorna o vetor contendo os veículos.
         return veiculos;
     }
 
-    //-- procura as info do carro apartir do id --//
+
     public static void printCarro(Veiculo[] veiculos, int id) {
-    // Percorre todos os veículos
-    for (int i = 0; i < veiculos.length; i++) {
-        if (veiculos[i] != null && veiculos[i].getId() == id) {
-            veiculos[i].format();
-            return;
+
+        for (int i = 0; i < veiculos.length; i++) {
+
+            if (veiculos[i] != null && veiculos[i].getId() == id) {
+
+                System.out.println(veiculos[i].format());
+                return;
+            }
         }
+
+        System.out.println("Veiculo nao encontrado.");
     }
-
-    // Caso nenhum veículo tenha aquele ID
-    System.out.println("Veiculo nao encontrado.");
-}
-
 }
 
 
@@ -162,6 +128,17 @@ class Data{
     public void setdia(int ano){
         this.ano = ano;
     }
+
+    public static Data ParseDia(String dataRegistro){
+        String[] data = dataRegistro.split("-");
+        int anoData = Integer.parseInt(data[0]);
+        int mesData = Integer.parseInt(data[1]);
+        int diaData = Integer.parseInt(data[2]);
+        return new Data(diaData, mesData, anoData);
+    }
+
+
+
 
     /* printagem da data */
     public String format(){
@@ -315,27 +292,67 @@ public Veiculo(int id, String marca, String modelo, int ano, String categoria, S
         this.data_registro = data_registro;
     }
 
+    public static Veiculo ParseVeiculo(String linha) {
+
+        String[] dados = linha.split(",");
+
+        int id = Integer.parseInt(dados[0]);
+        String marca = dados[1];
+        String modelo = dados[2];
+        int ano = Integer.parseInt(dados[3]);
+        String categoria = dados[4];
+        String combustivel = dados[5];
+        int cilindros = Integer.parseInt(dados[6]);
+        float cilindrada = Float.parseFloat(dados[7]);
+        String transmissao = dados[8];
+        String tracao = dados[9];
+        float consumoCidade = Float.parseFloat(dados[10]);
+        float consumoEstrada = Float.parseFloat(dados[11]);
+        float co2 = Float.parseFloat(dados[12]);
+        boolean turbo = Boolean.parseBoolean(dados[13]);
+
+        // Chama o ParseData para transformar a data
+        Data dataRegistro = Data.ParseDia(dados[14]);
+
+        // Cria e retorna o veículo
+        return new Veiculo(
+            id,
+            marca,
+            modelo,
+            ano,
+            categoria,
+            combustivel,
+            cilindros,
+            cilindrada,
+            transmissao,
+            tracao,
+            consumoCidade,
+            consumoEstrada,
+            co2,
+            turbo,
+            dataRegistro
+        );
+    }
+
     public String format() {
     String s ="[" + id + " ## " + marca + " ## " + modelo + " ## " + ano + " ## " + categoria + " ## " + combustivel + " ## " + cilindros + " ## " + cilindrada + " ## " + transmissao + " ## " + tracao + " ## " + consumo_cidade + " ## " + consumo_estrada + " ## " + co2 + " ## " + turbo + " ## ";
     s += data_registro.format() + "]";
     return s;
    }
 
-   
-
 
     public static void insertionSort(Veiculo[] veiculos) {
     for (int i = 1; i < veiculos.length; i++) {
-        Veiculo pivo = veiculos[i];
+        Veiculo tmp = veiculos[i];
         int j = i - 1;
 
         // Move os elementos que são maiores que o pivô para uma posição à frente
-        while (j >= 0 && veiculos[j].marca.compareToIgnoreCase(pivo.marca) > 0) { //compareToIgnoreCase não pode ser usado
+        while (j >= 0 && veiculos[j].marca.compareToIgnoreCase(tmp.marca) > 0) { //compareToIgnoreCase não pode ser usado
             veiculos[j + 1] = veiculos[j];
             j--;
         }
 
-        veiculos[j + 1] = pivo;
+        veiculos[j + 1] = tmp;
     }
 }
 }

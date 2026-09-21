@@ -168,9 +168,7 @@ Veiculos* ParseVeiculo(char* s) {
 // ==================== PARSE DATA ============== //
 
 Data ParseData(char* s) {
-
     Data data;
-
 
     sscanf(
         s,
