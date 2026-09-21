@@ -339,20 +339,4 @@ public Veiculo(int id, String marca, String modelo, int ano, String categoria, S
     s += data_registro.format() + "]";
     return s;
    }
-
-
-    public static void insertionSort(Veiculo[] veiculos) {
-    for (int i = 1; i < veiculos.length; i++) {
-        Veiculo tmp = veiculos[i];
-        int j = i - 1;
-
-        // Move os elementos que são maiores que o pivô para uma posição à frente
-        while (j >= 0 && veiculos[j].marca.compareToIgnoreCase(tmp.marca) > 0) { //compareToIgnoreCase não pode ser usado
-            veiculos[j + 1] = veiculos[j];
-            j--;
-        }
-
-        veiculos[j + 1] = tmp;
-    }
-}
 }
