@@ -7,7 +7,7 @@ public class Q7 {
         Veiculo[] veiculos = LerCSV.ler("javinha/veiculos.csv");
 
         Veiculo.Bucketsort(veiculos);
-        Veiculo.printPos(veiculos);
+        LerCSV.printCarro(veiculos);
     }
 }
 
@@ -49,18 +49,14 @@ class LerCSV {
     }
 
 
-    public static void printCarro(Veiculo[] veiculos, int id) {
+    public static void printCarro(Veiculo[] veiculos) {
 
         for (int i = 0; i < veiculos.length; i++) {
 
-            if (veiculos[i] != null && veiculos[i].getId() == id) {
-
+            if (veiculos[i] != null) {
                 System.out.println(veiculos[i].format());
-                return;
             }
         }
-
-        System.out.println("Veiculo nao encontrado.");
     }
 }
 
@@ -381,20 +377,5 @@ public Veiculo(int id, String marca, String modelo, int ano, String categoria, S
             posicao++;
         }
     }
-
    }
-   public static void printPos(Veiculo[] veiculos){
-    System.out.print("[");
-
-    for (int i = 0; i < veiculos.length; i++) {
-    if (veiculos[i] != null) {
-        System.out.print("veiculos[" + i + "]");
-        if (i < veiculos.length - 1) {
-            System.out.print(", ");
-            }
-        }
-    }
-    System.out.println("]");
-   }
-
 }
