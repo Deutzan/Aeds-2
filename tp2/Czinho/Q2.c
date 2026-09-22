@@ -54,9 +54,12 @@ Veiculos* LerCSV(char* caminhoArquivo, int* n) {
     FILE* arquivo = fopen(caminhoArquivo, "r");
 
     if (arquivo == NULL) {
+        //printf("ERRO: nao foi possivel abrir o arquivo: %s\n", caminhoArquivo);
         return NULL;
     }
+        //printf("Arquivo aberto com sucesso!\n");
 
+        
     int capacidade = 100;
 
     Veiculos* veiculos = malloc(capacidade * sizeof(Veiculos));
@@ -75,16 +78,11 @@ Veiculos* LerCSV(char* caminhoArquivo, int* n) {
         // Remove o \n
         linha[strcspn(linha, "\n")] = '\0';
 
-
         Veiculos* v = ParseVeiculo(linha);
-
 
         veiculos[*n] = *v;
 
-
         free(v);
-
-
         (*n)++;
 
 
@@ -103,7 +101,6 @@ Veiculos* LerCSV(char* caminhoArquivo, int* n) {
 
     fclose(arquivo);
 
-
     return veiculos;
 }
 
@@ -115,51 +112,28 @@ Veiculos* ParseVeiculo(char* s) {
     Veiculos* v = malloc(sizeof(Veiculos));
 
     char turbo[6];
-
     char data[11];
 
-
-    sscanf(
-        s,
-        "%d,%21[^,],%31[^,],%d,%29[^,],%8[^,],%d,%lf,%21[^,],%21[^,],%lf,%lf,%lf,%5[^,],%10[^\n]",
+    sscanf(s,"%d,%21[^,],%31[^,],%d,%29[^,],%8[^,],%d,%lf,%21[^,],%21[^,],%lf,%lf,%lf,%5[^,],%10[^\n]",
 
         &v->id,
-
         v->marca,
-
         v->modelo,
-
         &v->ano,
-
         v->categoria,
-
         v->combustivel,
-
         &v->cilindros,
-
         &v->cilindrada,
-
         v->transmissao,
-
         v->tracao,
-
         &v->consumo_cidade,
-
         &v->consumo_estrada,
-
         &v->co2,
-
         turbo,
-
         data
     );
-
-
     v->turbo = strcmp(turbo, "true") == 0;
-
-
     v->data_registro = ParseData(data);
-
 
     return v;
 }
@@ -170,14 +144,7 @@ Veiculos* ParseVeiculo(char* s) {
 Data ParseData(char* s) {
     Data data;
 
-    sscanf(
-        s,
-        "%d-%d-%d",
-        &data.ano,
-        &data.mes,
-        &data.dia
-    );
-
+    sscanf(s,"%d-%d-%d",&data.ano,&data.mes,&data.dia);
 
     return data;
 }
@@ -186,14 +153,7 @@ Data ParseData(char* s) {
 // ==================== FORMAT DATA ====================
 
 void formatData(Data d, char* buffer) {
-
-    sprintf(
-        buffer,
-        "%04d-%02d-%02d",
-        d.ano,
-        d.mes,
-        d.dia
-    );
+    sprintf(buffer, "%04d/%02d/%02d",d.ano,d.mes,d.dia );
 }
 
 
@@ -204,45 +164,24 @@ void formatVeiculo(Veiculos v, char* buffer) {
     char data[30];
 
 
-    formatData(
-        v.data_registro,
-        data
-    );
+    formatData(v.data_registro,data);
 
 
-    sprintf(
-        buffer,
-
-        "(%d ## %s ## %s ## %d ## %s ## %s ## %d ## %.1lf ## %s ## %s ## %.2lf ## %.2lf ## %.1lf ## %s ## %s)",
-
+    sprintf(buffer,"[%d ## %s ## %s ## %d ## %s ## %s ## %d ## %.1lf ## %s ## %s ## %.2lf ## %.2lf ## %.1lf ## %s ## %s]",
         v.id,
-
         v.marca,
-
         v.modelo,
-
         v.ano,
-
         v.categoria,
-
         v.combustivel,
-
         v.cilindros,
-
         v.cilindrada,
-
         v.transmissao,
-
         v.tracao,
-
         v.consumo_cidade,
-
         v.consumo_estrada,
-
         v.co2,
-
         v.turbo ? "true" : "false",
-
         data
     );
 }
@@ -251,56 +190,29 @@ void formatVeiculo(Veiculos v, char* buffer) {
 // ==================== MAIN ====================
 
 int main() {
-
     int n;
 
-
-    Veiculos* veiculos = LerCSV(
-        "veiculos.csv",
-        &n
-    );
-
+    Veiculos* veiculos = LerCSV("veiculosC.csv",&n);
 
     if (veiculos == NULL) {
         return 1;
     }
 
-
     int id;
-
-
     scanf("%d", &id);
-
 
     while (id != -1) {
 
         for (int i = 0; i < n; i++) {
 
             if (veiculos[i].id == id) {
-
                 char buffer[500];
-
-
-                formatVeiculo(
-                    veiculos[i],
-                    buffer
-                );
-
-
+                formatVeiculo(veiculos[i], buffer);
                 printf("%s\n", buffer);
-
-
                 i = n;
             }
         }
-
-
         scanf("%d", &id);
     }
-
-
     free(veiculos);
-
-
-    return 0;
 }

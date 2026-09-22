@@ -142,7 +142,7 @@ class Data{
 
     /* printagem da data */
     public String format(){
-        String s = dia + "/" + mes + "/" + ano;
+        String s = String.format("%02d/%02d/%04d", dia, mes, ano);
         return s;
     }
 
