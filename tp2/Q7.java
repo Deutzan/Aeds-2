@@ -1,40 +1,16 @@
-package Javinha;
-import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-public class Q1 {
-
-    public static void main(String[] args) {
-
-        //-- Lê todos os veículos do arquivo CSV --//
+public class Q7 {
+    public static void main(String[] args){
         Veiculo[] veiculos = LerCSV.ler("javinha/veiculos.csv");
 
-        Scanner scan = new Scanner(System.in);
-        int idProcurado;
-
-        idProcurado = scan.nextInt();
-
-        if (idProcurado != -1) {
-            LerCSV.printCarro(veiculos, idProcurado);
-        }
-
-        while (idProcurado != -1){
-        idProcurado = scan.nextInt();
-
-            if (idProcurado != -1) {
-                LerCSV.printCarro(veiculos, idProcurado);
-            }
-         }
-        scan.close();
-}
+        Veiculo.Bucketsort(veiculos);
+        LerCSV.printCarro(veiculos);
+    }
 }
 
-//lerCSV
 class LerCSV {
-
-
-
 
     public static Veiculo[] ler(String carro) {
 
@@ -72,18 +48,14 @@ class LerCSV {
     }
 
 
-    public static void printCarro(Veiculo[] veiculos, int id) {
+    public static void printCarro(Veiculo[] veiculos) {
 
         for (int i = 0; i < veiculos.length; i++) {
 
-            if (veiculos[i] != null && veiculos[i].getId() == id) {
-
+            if (veiculos[i] != null) {
                 System.out.println(veiculos[i].format());
-                return;
             }
         }
-
-        System.out.println("Veiculo nao encontrado.");
     }
 }
 
@@ -338,5 +310,71 @@ public Veiculo(int id, String marca, String modelo, int ano, String categoria, S
     String s ="[" + id + " ## " + marca + " ## " + modelo + " ## " + ano + " ## " + categoria + " ## " + combustivel + " ## " + cilindros + " ## " + cilindrada + " ## " + transmissao + " ## " + tracao + " ## " + consumo_cidade + " ## " + consumo_estrada + " ## " + co2 + " ## " + turbo + " ## ";
     s += data_registro.format() + "]";
     return s;
+   }
+
+   public static void Bucketsort(Veiculo[] veiculos){
+    //-- criando e botando em um vetor as cilindradas
+    double[] h = new double[501];
+    double maior = 0,menor = 9;
+    for(int i = 0; i < veiculos.length; i++){
+        if (veiculos[i] != null) {
+            h[i] = veiculos[i].getCilindrada();
+            if (h[i] < menor) {
+                menor = h[i];
+            }
+
+            if (h[i] > maior) {
+                maior = h[i];
+            }
+        }
+        }
+
+    //-- cria os 10 buckets e coloca em uma matriz para bucket[balde que esta][quantidade] --//
+    Veiculo[][] buckets = new Veiculo[10][501];
+
+    // Guarda quantos veículos existem dentro de cada bucket
+    int[] quantidade = new int[10];
+
+    for (int i = 0; i < veiculos.length; i++) {
+        if (veiculos[i] != null) {
+            double cilindrada = h[i];
+        
+            int indiceBucket = (int)(cilindrada / 0.8);
+        // Caso a cilindrada seja exatamente 8.0
+            if (indiceBucket == 10) {
+            indiceBucket = 9;
+            }
+        
+        // Coloca o VEÍCULO completo no bucket
+        buckets[indiceBucket][quantidade[indiceBucket]] = veiculos[i];
+
+        quantidade[indiceBucket]++;
+        }
+    }
+
+    //-- Insertion Sort dentro de cada bucket --//
+    for (int b = 0; b < 10; b++) {
+        for (int i = 1; i < quantidade[b]; i++) {
+            Veiculo atual = buckets[b][i];
+            int j = i - 1;
+
+            while (j >= 0 &&
+                buckets[b][j].getCilindrada() > atual.getCilindrada()) {
+                buckets[b][j + 1] = buckets[b][j];
+                j--;
+            }
+            buckets[b][j + 1] = atual;
+        }
+    }
+
+    //-- Coloca os buckets ordenados de volta em veiculos --//
+    int posicao = 0;
+
+    for (int b = 0; b < 10; b++) {
+        for (int j = 0; j < quantidade[b]; j++) {
+            veiculos[posicao] = buckets[b][j];
+            posicao++;
+        }
+    }
    }
 }

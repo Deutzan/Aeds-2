@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Q1",
+      "request": "launch",
+      "mainClass": "Q1",
+      "projectName": "tp2_5ab95e09"
+    },
+    {
+      "type": "java",
       "name": "Q7a",
       "request": "launch",
       "mainClass": "Javinha.Q7a",
