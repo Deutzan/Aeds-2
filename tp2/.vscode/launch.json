@@ -1,0 +1,64 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Q1",
+      "request": "launch",
+      "mainClass": "Q1",
+      "projectName": "tp2_5ab95e09"
+    },
+    {
+      "type": "java",
+      "name": "Q7a",
+      "request": "launch",
+      "mainClass": "Javinha.Q7a",
+      "projectName": "tp2_5ab95e09"
+    },
+    {
+      "type": "java",
+      "name": "Q3",
+      "request": "launch",
+      "mainClass": "Q3",
+      "projectName": "tp2_5ab95e09"
+    },
+    {
+      "type": "java",
+      "name": "Q7",
+      "request": "launch",
+      "mainClass": "Javinha.Q7",
+      "projectName": "tp2_5ab95e09"
+    },
+    {
+      "type": "java",
+      "name": "Q7",
+      "request": "launch",
+      "mainClass": "Q7",
+      "projectName": "tp2_5ab95e09"
+    },
+    {
+      "type": "java",
+      "name": "Q1",
+      "request": "launch",
+      "mainClass": "Javinha.Q1",
+      "projectName": "tp2_5ab95e09"
+    },
+    {
+      "type": "java",
+      "name": "Q1",
+      "request": "launch",
+      "mainClass": "Q1",
+      "projectName": "tp2_7e3621cc"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "console": "externalTerminal",
+      "cwd": ".",
+      "program": "build/Debug/outDebug"
+    }
+  ]
+}
