@@ -3,17 +3,11 @@
 #include <string.h>
 #include <stdbool.h>
 
-
-// ==================== STRUCT DATA ====================
-
 typedef struct Data {
     int dia;
     int mes;
     int ano;
 } Data;
-
-
-// ==================== STRUCT VEICULOS ====================
 
 typedef struct Veiculos {
     int id;
@@ -21,7 +15,7 @@ typedef struct Veiculos {
     char modelo[32];
     int ano;
     char categoria[30];
-    char combustivel[9];
+    char combustivel[25];
     int cilindros;
     double cilindrada;
     char transmissao[22];
@@ -33,223 +27,204 @@ typedef struct Veiculos {
     Data data_registro;
 } Veiculos;
 
+Data ParseData(char *s) {
+    Data data;
 
-// ==================== PROTOTIPOS ====================
+    sscanf(s, "%d-%d-%d",&data.ano,&data.mes,&data.dia);
+    return data;
+}
 
-Veiculos* LerCSV(char* caminhoArquivo, int* n);
+Veiculos ParseVeiculo(char *s) {
+    Veiculos v;
 
-Veiculos* ParseVeiculo(char* s);
+    char turbo[10];
+    char data[20];
+    char campos[15][100];
+    int quantidade = 0;
+    int dentroColchetes = 0;
+    int pos = 0;
 
-Data ParseData(char* s);
+    char campo[100];
 
-void formatVeiculo(Veiculos v, char* buffer);
-
-void formatData(Data d, char* buffer);
-
-
-// ==================== LER CSV ====================
-
-Veiculos* LerCSV(char* caminhoArquivo, int* n) {
-
-    FILE* arquivo = fopen(caminhoArquivo, "r");
-
-    if (arquivo == NULL) {
-        //printf("ERRO: nao foi possivel abrir o arquivo: %s\n", caminhoArquivo);
-        return NULL;
-    }
-        //printf("Arquivo aberto com sucesso!\n");
-
-        
-    int capacidade = 100;
-
-    Veiculos* veiculos = malloc(capacidade * sizeof(Veiculos));
-
-    char linha[500];
-
-    *n = 0;
-
-
-    // Ignora o cabeçalho
-    fgets(linha, sizeof(linha), arquivo);
-
-
-    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
-
-        // Remove o \n
-        linha[strcspn(linha, "\n")] = '\0';
-
-        Veiculos* v = ParseVeiculo(linha);
-
-        veiculos[*n] = *v;
-
-        free(v);
-        (*n)++;
-
-
-        // Aumenta o vetor se necessário
-        if (*n >= capacidade) {
-
-            capacidade *= 2;
-
-            veiculos = realloc(
-                veiculos,
-                capacidade * sizeof(Veiculos)
-            );
+    for (int i = 0; s[i] != '\0'; i++) {
+        if (s[i] == '['){
+            dentroColchetes = 1;
+        }
+        if (s[i] == ']'){
+            dentroColchetes = 0;
+        }
+        if (s[i] == ',' && dentroColchetes == 0) {
+            campo[pos] = '\0';
+            strcpy(campos[quantidade], campo);
+            quantidade++;
+            pos = 0;
+        } 
+        else {
+            campo[pos] = s[i];
+            pos++;
         }
     }
 
+    campo[pos] = '\0';
 
-    fclose(arquivo);
+    strcpy(campos[quantidade], campo);
+    quantidade++;
 
-    return veiculos;
-}
+    v.id = atoi(campos[0]);
+    strcpy(v.marca, campos[1]);
+    strcpy(v.modelo, campos[2]);
 
+    v.ano = atoi(campos[3]);
 
-// ==================== PARSE VEICULO ====================
+    strcpy(v.categoria, campos[4]);
+    strcpy(v.combustivel, campos[5]);
 
-Veiculos* ParseVeiculo(char* s) {
+    v.cilindros = atoi(campos[6]);
+    v.cilindrada = atof(campos[7]);
 
-    Veiculos* v = malloc(sizeof(Veiculos));
+    strcpy(v.transmissao, campos[8]);
+    strcpy(v.tracao, campos[9]);
 
-    char turbo[6];
-    char data[11];
+    v.consumo_cidade = atof(campos[10]);
+    v.consumo_estrada = atof(campos[11]);
+    v.co2 = atof(campos[12]);
 
-    sscanf(s,"%d,%21[^,],%31[^,],%d,%29[^,],%8[^,],%d,%lf,%21[^,],%21[^,],%lf,%lf,%lf,%5[^,],%10[^\n]",
+    strcpy(turbo, campos[13]);
+    v.turbo = strcmp(turbo, "true") == 0;
 
-        &v->id,
-        v->marca,
-        v->modelo,
-        &v->ano,
-        v->categoria,
-        v->combustivel,
-        &v->cilindros,
-        &v->cilindrada,
-        v->transmissao,
-        v->tracao,
-        &v->consumo_cidade,
-        &v->consumo_estrada,
-        &v->co2,
-        turbo,
-        data
-    );
-    v->turbo = strcmp(turbo, "true") == 0;
-    v->data_registro = ParseData(data);
+    strcpy(data, campos[14]);
+    v.data_registro = ParseData(data);
 
     return v;
 }
 
-void countingSortCilindros(Veiculos* veiculos, int n) {
+Veiculos* LerCSV(char *caminhoArquivo, int *n) {
+    FILE *arquivo = fopen(caminhoArquivo, "r");
 
+    if (arquivo == NULL)
+        return NULL;
+
+    int capacidade = 100;
+
+    Veiculos *veiculos = malloc(capacidade * sizeof(Veiculos));
+    char linha[500];
+    *n = 0;
+    fgets(linha, sizeof(linha), arquivo);
+
+    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+        linha[strcspn(linha, "\n")] = '\0';
+        veiculos[*n] = ParseVeiculo(linha);
+        (*n)++;
+        if (*n >= capacidade) {
+            capacidade *= 2;
+            veiculos = realloc(veiculos, capacidade * sizeof(Veiculos));
+        }
+    }
+    fclose(arquivo);
+    return veiculos;
+}
+
+Veiculos* buscarPorId(Veiculos *veiculos, int n, int id) {
+    for (int i = 0; i < n; i++) {
+        if (veiculos[i].id == id) {
+            return &veiculos[i];
+        }
+    }
+    return NULL;
+}
+
+void countingSortCilindros(Veiculos *veiculos, int n) {
+    if (n <= 0){
+        return;
+    }
     int maior = veiculos[0].cilindros;
 
-    // Descobre o maior número de cilindros
     for (int i = 1; i < n; i++) {
         if (veiculos[i].cilindros > maior) {
             maior = veiculos[i].cilindros;
         }
     }
+    int *contagem = calloc(maior + 1, sizeof(int));
 
-    // Vetor de contagem
-    int* contagem = calloc(maior + 1, sizeof(int));
-
-    // Conta quantos veículos existem para cada quantidade de cilindros
     for (int i = 0; i < n; i++) {
         contagem[veiculos[i].cilindros]++;
     }
 
-    // Acumula as contagens
     for (int i = 1; i <= maior; i++) {
         contagem[i] += contagem[i - 1];
     }
 
-    // Vetor auxiliar
-    Veiculos* ordenados = malloc(n * sizeof(Veiculos));
-
-    // Coloca cada veículo na posição correta
+    Veiculos *ordenados = malloc(n * sizeof(Veiculos));
     for (int i = n - 1; i >= 0; i--) {
         int cilindros = veiculos[i].cilindros;
-
         ordenados[contagem[cilindros] - 1] = veiculos[i];
-
         contagem[cilindros]--;
     }
 
-    // Copia de volta para o vetor original
     for (int i = 0; i < n; i++) {
         veiculos[i] = ordenados[i];
     }
-
     free(contagem);
     free(ordenados);
 }
 
-
-// ==================== PARSE DATA ============== //
-
-Data ParseData(char* s) {
-    Data data;
-
-    sscanf(s,"%d-%d-%d",&data.ano,&data.mes,&data.dia);
-
-    return data;
+void formatData(Data *d, char *buffer) {
+    sprintf(buffer,"%02d/%02d/%04d",d->dia,d->mes,d->ano);
 }
 
-
-// ==================== FORMAT DATA ====================
-
-void formatData(Data d, char* buffer) {
-    sprintf(buffer, "%04d/%02d/%02d",d.ano,d.mes,d.dia );
-}
-
-
-// ==================== FORMAT VEICULO ====================
-
-void formatVeiculo(Veiculos v, char* buffer) {
-
+void formatVeiculo(Veiculos *v, char *buffer) {
     char data[30];
 
+    formatData(&v->data_registro, data);
 
-    formatData(v.data_registro,data);
-
-
-    sprintf(buffer,"[%d ## %s ## %s ## %d ## %s ## %s ## %d ## %.1lf ## %s ## %s ## %.2lf ## %.2lf ## %.1lf ## %s ## %s]",
-        v.id,
-        v.marca,
-        v.modelo,
-        v.ano,
-        v.categoria,
-        v.combustivel,
-        v.cilindros,
-        v.cilindrada,
-        v.transmissao,
-        v.tracao,
-        v.consumo_cidade,
-        v.consumo_estrada,
-        v.co2,
-        v.turbo ? "true" : "false",
+    sprintf(
+        buffer,
+        "[%d ## %s ## %s ## %d ## %s ## %s ## %d ## %.1lf ## %s ## %s ## %.2lf ## %.2lf ## %.1lf ## %s ## %s]",
+        v->id,
+        v->marca,
+        v->modelo,
+        v->ano,
+        v->categoria,
+        v->combustivel,
+        v->cilindros,
+        v->cilindrada,
+        v->transmissao,
+        v->tracao,
+        v->consumo_cidade,
+        v->consumo_estrada,
+        v->co2,
+        v->turbo ? "true" : "false",
         data
     );
 }
 
-
-// ==================== MAIN ====================
-
 int main() {
     int n;
 
-    Veiculos* veiculos = LerCSV("veiculosC.csv", &n);
+    Veiculos *todos =LerCSV("veiculosC.csv", &n);
 
-    if (veiculos == NULL) {
+    if (todos == NULL)
         return 1;
+
+    Veiculos selecionados[50];
+    int quantidade = 0;
+    int id;
+
+    while (scanf("%d", &id) == 1 && id != -1) {
+        Veiculos *veiculo = buscarPorId(todos, n, id);
+        if (veiculo != NULL) {
+            selecionados[quantidade] = *veiculo;
+            quantidade++;
+        }
     }
-    countingSortCilindros(veiculos, n);
-    for (int i = 0; i < n; i++) {
-    char buffer[500];
+    countingSortCilindros(selecionados, quantidade);
 
-    formatVeiculo(veiculos[i], buffer);
+    for (int i = 0; i < quantidade; i++) {
+        char buffer[500];
+        formatVeiculo(&selecionados[i],buffer);
 
-    printf("%s\n", buffer);
-}
+        printf("%s\n", buffer);
+    }
 
-free(veiculos);
+    free(todos);
 }

@@ -338,14 +338,7 @@ int main() {
         }
     }
 
-
-    // ==================== LIBERA MEMÓRIA ====================
-
     free(veiculos);
-
     free(ids);
-
     free(selecionados);
-
-    return 0;
 }

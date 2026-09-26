@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "questao9",
+      "request": "launch",
+      "mainClass": "questao9",
+      "projectName": "Trabalho2_bc10ceb4"
+    },
+    {
+      "type": "java",
       "name": "questao4",
       "request": "launch",
       "mainClass": "Q4.questao4",
