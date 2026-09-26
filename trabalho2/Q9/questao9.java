@@ -8,7 +8,7 @@ public class questao9 {
 
         Lista lista = new Lista(1000);
 
-        Scanner scan = new Scanner(System.in);
+        try (Scanner scan = new Scanner(System.in)) {
 
         // =========================================
         // PRIMEIRA PARTE DA ENTRADA
@@ -45,8 +45,7 @@ public class questao9 {
 
                 int idVeiculo = scan.nextInt();
 
-                Veiculo veiculo =
-                    LerCSV.buscarPorId(veiculos, idVeiculo);
+                Veiculo veiculo = LerCSV.buscarPorId(veiculos, idVeiculo);
 
                 if (veiculo != null) {
                     lista.inserirInicio(veiculo);
@@ -147,7 +146,7 @@ public class questao9 {
 
         lista.mostrar();
 
-        scan.close();
+        }
     }
 }
 
@@ -744,7 +743,6 @@ class LerCSV {
     // =================================================
 
     public static Veiculo buscarPorId(Veiculo[] veiculos,int id) {
-
     for (int i = 0; i < veiculos.length; i++) {
 
             if (veiculos[i].getId() == id) {

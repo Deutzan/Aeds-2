@@ -313,7 +313,7 @@ int main() {
             }
         }
     }
-
+    //quero ver se ele ta puxando errado
     mostrarFila(&fila);
     free(veiculos);
 }
