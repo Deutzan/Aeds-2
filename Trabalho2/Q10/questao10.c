@@ -341,21 +341,16 @@ void mostrarFila(Fila *fila) {
 }
 
 
-// =====================================================
 // MAIN
-// =====================================================
 
 int main() {
     int n;
 
     Veiculos *veiculos = LerCSV("veiculosJ.csv", &n);
     Fila fila;
-
     inicializarFila(&fila);
 
-    // =================================================
     // PRIMEIRA PARTE DA ENTRADA
-    // =================================================
 
     int id;
 
@@ -363,35 +358,22 @@ int main() {
 
     while (id != -1) {
         Veiculos *veiculo = buscarPorId(veiculos, n, id);
-        
         if (veiculo != NULL) {
-
             inserir(&fila, *veiculo);
         }
-
         scanf("%d", &id);
     }
 
-
-    // =================================================
     // SEGUNDA PARTE DA ENTRADA
-    // =================================================
 
     int quantidade;
-
     scanf("%d", &quantidade);
 
     for (int i = 0; i < quantidade; i++) {
-
         char comando;
-
         scanf(" %c", &comando);
 
-
-        // =============================================
         // INSERIR
-        // =============================================
-
         if (comando == 'I') {
 
             int idVeiculo;
@@ -405,36 +387,15 @@ int main() {
                 inserir(&fila, *veiculo);
             }
         }
-
-
-        // =============================================
         // REMOVER
-        // =============================================
-
         else if (comando == 'R') {
-
             if (!filaVazia(&fila)) {
-
                 Veiculos removido = remover(&fila);
-
                 printf("(R)%s %s\n",removido.marca,removido.modelo);
             }
         }
     }
 
-
-    // =================================================
-    // MOSTRAR FILA FINAL
-    // =================================================
-
     mostrarFila(&fila);
-
-
-    // =================================================
-    // LIBERAR MEMÓRIA
-    // =================================================
-
     free(veiculos);
-
-    return 0;
 }
