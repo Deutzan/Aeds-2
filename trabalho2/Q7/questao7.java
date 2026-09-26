@@ -1,275 +1,350 @@
+
 package Q7;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Scanner;
 
 public class questao7 {
-    public static void main(String[] args){
-        Veiculo[] veiculos = LerCSV.ler("veiculosJ.csv");
 
-        Veiculo.Bucketsort(veiculos);
-        LerCSV.printCarro(veiculos);
+    public static void main(String[] args) {
+        Veiculo[] todos = LerCSV.ler("veiculosJ.csv");
+        Veiculo[] selecionados = new Veiculo[50];
+        int quantidade = 0;
+
+        Scanner entrada = new Scanner(System.in);
+        int id;
+
+        while ((id = entrada.nextInt()) != -1) {
+            Veiculo veiculo = LerCSV.buscarPorId(todos, id);
+
+            if (veiculo != null) {
+                selecionados[quantidade] = veiculo;
+                quantidade++;
+            }
+        }
+
+        Veiculo[] usados = new Veiculo[quantidade];
+        for (int i = 0; i < quantidade; i++) {
+            usados[i] = selecionados[i];
+        }
+
+        Veiculo.Bucketsort(usados);
+        LerCSV.printCarro(usados);
+
+        entrada.close();
     }
 }
 
+
+// LER CSV 
+
 class LerCSV {
-
-    public static Veiculo[] ler(String carro) {
-
+    public static Veiculo[] ler(String caminho) {
         Veiculo[] veiculos = new Veiculo[501];
-
         int quantidade = 0;
-
         try {
-            // Abre o arquivo para leitura.
-            BufferedReader arquivo = new BufferedReader(new FileReader(carro));
 
+            BufferedReader arquivo = new BufferedReader(new FileReader(caminho));
             arquivo.readLine();
-
             String linha;
 
             while ((linha = arquivo.readLine()) != null) {
-   
-                // ParseVeiculo transforma a linha em um objeto Veiculo
                 Veiculo veiculo = Veiculo.ParseVeiculo(linha);
-
                 veiculos[quantidade] = veiculo;
-
                 quantidade++;
             }
-
             arquivo.close();
-
         } catch (Exception e) {
-
             System.out.println("Erro ao ler o arquivo.");
-            e.printStackTrace(); //--> recomendação para caso caia na exceção ele mostre oque esta realmente acontecendo --//
+            e.printStackTrace();
         }
-
         return veiculos;
     }
 
 
-    public static void printCarro(Veiculo[] veiculos) {
-
+    public static Veiculo buscarPorId(
+        Veiculo[] veiculos,int id) {
         for (int i = 0; i < veiculos.length; i++) {
+            if (veiculos[i] != null &&
+                veiculos[i].getId() == id) {
+                return veiculos[i];
+            }
+        }
+        return null;
+    }
 
+
+    public static void printCarro(Veiculo[] veiculos) {
+        for (int i = 0; i < veiculos.length; i++) {
             if (veiculos[i] != null) {
-                System.out.println(veiculos[i].format());
+                System.out.println(veiculos[i].format()
+                );
             }
         }
     }
 }
 
 
-//Data
-class Data{
+// DATA 
+
+class Data {
     private int dia;
     private int mes;
     private int ano;
 
-    //-- construtor --//
-    public Data(){
-        this.dia = 00;
-        this.mes = 00;
-        this.ano = 0000;
+    public Data() {
+        this.dia = 0;
+        this.mes = 0;
+        this.ano = 0;
     }
-    
-    public Data(int dia,int mes,int ano){
+
+    public Data(int dia, int mes, int ano) {
         this.dia = dia;
         this.mes = mes;
         this.ano = ano;
     }
 
-    //-- gets e sets --//
-    public int getDia(){
+    public int getDia() {
         return dia;
     }
-    public void setDia(int dia){
+
+    public void setDia(int dia) {
         this.dia = dia;
     }
 
-    public int getMes(){
+    public int getMes() {
         return mes;
     }
-    public void setMes(int mes){
+
+    public void setMes(int mes) {
         this.mes = mes;
-    }
-
-    public int getAno(){
-        return ano;
-    }
-    public void setdia(int ano){
-        this.ano = ano;
-    }
-
-    public static Data ParseDia(String dataRegistro){
-        String[] data = dataRegistro.split("-");
-        int anoData = Integer.parseInt(data[0]);
-        int mesData = Integer.parseInt(data[1]);
-        int diaData = Integer.parseInt(data[2]);
-        return new Data(diaData, mesData, anoData);
-    }
-
-
-
-
-    /* printagem da data */
-    public String format(){
-        String s = String.format("%02d/%02d/%04d", dia, mes, ano);
-        return s;
-    }
-
-}
-
-//Veiculo
-class Veiculo {
-//-- atributos --//
-private int id;
-private String marca;
-private String modelo;
-private int ano;
-private String categoria;
-private String combustivel;
-private int cilindros;
-private float cilindrada;
-private String transmissao;
-private String tracao;
-private double consumo_cidade;
-private double consumo_estrada;
-private double co2;
-private boolean turbo;
-private Data data_registro;
-
-//-- construtor --//
-public Veiculo(int id, String marca, String modelo, int ano, String categoria, String combustivel, int cilindros, float cilindrada, String transmissao, String tracao, float consumo_cidade, float consumo_estrada, float co2, boolean turbo, Data data_registro) {
-    this.id = id;
-    this.marca = marca;
-    this.modelo = modelo;
-    this.ano = ano;
-    this.categoria = categoria;
-    this.combustivel = combustivel;
-    this.cilindros = cilindros;
-    this.cilindrada = cilindrada;
-    this.transmissao = transmissao;
-    this.tracao = tracao;
-    this.consumo_cidade = consumo_cidade;
-    this.consumo_estrada = consumo_estrada;
-    this.co2 = co2;
-    this.turbo = turbo;
-    this.data_registro = data_registro;
-}
-
-//-- getters e setters --//
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-    
-    public String getModelo() {
-        return modelo;
-    }
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
     }
 
     public int getAno() {
         return ano;
     }
+
     public void setAno(int ano) {
         this.ano = ano;
     }
 
+    public static Data ParseDia(String dataRegistro) {
+        String[] data = dataRegistro.split("-");
+        int anoData = Integer.parseInt(data[0]);
+        int mesData = Integer.parseInt(data[1]);
+        int diaData = Integer.parseInt(data[2]);
+        return new Data(diaData,mesData,anoData);
+    }
+
+
+    public String format() {
+        return String.format("%02d/%02d/%04d",dia, mes,ano);
+    }
+}
+
+
+// VEICULO
+
+class Veiculo {
+    private int id;
+    private String marca;
+    private String modelo;
+    private int ano;
+    private String categoria;
+    private String combustivel;
+    private int cilindros;
+    private float cilindrada;
+    private String transmissao;
+    private String tracao;
+    private double consumo_cidade;
+    private double consumo_estrada;
+    private double co2;
+    private boolean turbo;
+    private Data data_registro;
+
+    public Veiculo(
+        int id,
+        String marca,
+        String modelo,
+        int ano,
+        String categoria,
+        String combustivel,
+        int cilindros,
+        float cilindrada,
+        String transmissao,
+        String tracao,
+        float consumo_cidade,
+        float consumo_estrada,
+        float co2,
+        boolean turbo,
+        Data data_registro
+    ) {
+
+        this.id = id;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.ano = ano;
+        this.categoria = categoria;
+        this.combustivel = combustivel;
+        this.cilindros = cilindros;
+        this.cilindrada = cilindrada;
+        this.transmissao = transmissao;
+        this.tracao = tracao;
+        this.consumo_cidade = consumo_cidade;
+        this.consumo_estrada = consumo_estrada;
+        this.co2 = co2;
+        this.turbo = turbo;
+        this.data_registro = data_registro;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public int getAno() {
+        return ano;
+    }
+
+
     public String getCategoria() {
         return categoria;
-    }
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
     }
 
     public String getCombustivel() {
         return combustivel;
     }
-    public void setCombustivel(String combustivel) {
-        this.combustivel = combustivel;
-    }
 
     public int getCilindros() {
         return cilindros;
-    }
-    public void setCilindros(int cilindros) {
-        this.cilindros = cilindros;
     }
 
     public float getCilindrada() {
         return cilindrada;
     }
-    public void setCilindrada(float cilindrada) {
-        this.cilindrada = cilindrada;
-    }
 
     public String getTransmissao() {
         return transmissao;
-    }
-    public void setTransmissao(String transmissao) {
-        this.transmissao = transmissao;
     }
 
     public String getTracao() {
         return tracao;
     }
-    public void setTracao(String tracao) {
-        this.tracao = tracao;
-    }
 
     public double getConsumo_cidade() {
         return consumo_cidade;
-    }
-    public void setConsumo_cidade(double consumo_cidade) {
-        this.consumo_cidade = consumo_cidade;
     }
 
     public double getConsumo_estrada() {
         return consumo_estrada;
     }
-    public void setConsumo_estrada(double consumo_estrada) {
-        this.consumo_estrada = consumo_estrada;
-    }
 
     public double getCo2() {
         return co2;
-    }
-    public void setCo2(double co2) {
-        this.co2 = co2;
     }
 
     public boolean isTurbo() {
         return turbo;
     }
-    public void setTurbo(boolean turbo) {
-        this.turbo = turbo;
-    }
 
     public Data getData_registro() {
         return data_registro;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public void setCombustivel(String combustivel) {
+        this.combustivel = combustivel;
+    }
+
+    public void setCilindros(int cilindros) {
+        this.cilindros = cilindros;
+    }
+
+    public void setCilindrada(float cilindrada) {
+        this.cilindrada = cilindrada;
+    }
+
+    public void setTransmissao(String transmissao) {
+        this.transmissao = transmissao;
+    }
+
+    public void setTracao(String tracao) {
+        this.tracao = tracao;
+    }
+
+    public void setConsumo_cidade(double consumo_cidade) {
+        this.consumo_cidade = consumo_cidade;
+    }
+
+    public void setConsumo_estrada(double consumo_estrada) {
+        this.consumo_estrada = consumo_estrada;
+    }
+
+    public void setCo2(double co2) {
+        this.co2 = co2;
+    }
+
+    public void setTurbo(boolean turbo) {
+        this.turbo = turbo;
+    }
+
     public void setData_registro(Data data_registro) {
         this.data_registro = data_registro;
     }
 
+    public static String[] separarCampos(String linha) {
+        String[] campos = new String[15];
+        int quantidade = 0;
+        int inicio = 0;
+        boolean dentroColchetes = false;
+
+        for (int i = 0; i < linha.length(); i++) {
+            if (linha.charAt(i) == '[') {
+                dentroColchetes = true;
+            } 
+            else if (linha.charAt(i) == ']') {
+                dentroColchetes = false;
+            } 
+            else if (linha.charAt(i) == ',' && !dentroColchetes) {
+                campos[quantidade] = linha.substring(inicio, i);
+                quantidade++;
+                inicio = i + 1;
+            }
+        }
+        campos[quantidade] = linha.substring(inicio);
+        return campos;
+    }
+
+    // PARSE VEICULO
     public static Veiculo ParseVeiculo(String linha) {
-
-        String[] dados = linha.split(",");
-
+        String[] dados = separarCampos(linha);
         int id = Integer.parseInt(dados[0]);
         String marca = dados[1];
         String modelo = dados[2];
@@ -284,11 +359,8 @@ public Veiculo(int id, String marca, String modelo, int ano, String categoria, S
         float consumoEstrada = Float.parseFloat(dados[11]);
         float co2 = Float.parseFloat(dados[12]);
         boolean turbo = Boolean.parseBoolean(dados[13]);
-
-        // Chama o ParseData para transformar a data
         Data dataRegistro = Data.ParseDia(dados[14]);
 
-        // Cria e retorna o veículo
         return new Veiculo(
             id,
             marca,
@@ -308,75 +380,71 @@ public Veiculo(int id, String marca, String modelo, int ano, String categoria, S
         );
     }
 
+
+    // FORMAT 
     public String format() {
-    String s ="[" + id + " ## " + marca + " ## " + modelo + " ## " + ano + " ## " + categoria + " ## " + combustivel + " ## " + cilindros + " ## " + cilindrada + " ## " + transmissao + " ## " + tracao + " ## " + consumo_cidade + " ## " + consumo_estrada + " ## " + co2 + " ## " + turbo + " ## ";
-    s += data_registro.format() + "]";
-    return s;
-   }
+        return String.format("[%d ## %s ## %s ## %d ## %s ## %s ## %d ## %.1f ## %s ## %s ## %.2f ## %.2f ## %.1f ## %s ## %s]",
+            id,
+            marca,
+            modelo,
+            ano,
+            categoria,
+            combustivel,
+            cilindros,
+            cilindrada,
+            transmissao,
+            tracao,
+            consumo_cidade,
+            consumo_estrada,
+            co2,
+            turbo,
+            data_registro.format()
+        );
+    }
 
-   public static void Bucketsort(Veiculo[] veiculos){
-    //-- criando e botando em um vetor as cilindradas
-    double[] h = new double[501];
-    double maior = 0,menor = 9;
-    for(int i = 0; i < veiculos.length; i++){
-        if (veiculos[i] != null) {
-            h[i] = veiculos[i].getCilindrada();
-            if (h[i] < menor) {
-                menor = h[i];
-            }
 
-            if (h[i] > maior) {
-                maior = h[i];
-            }
+    // BUCKET SORT
+    public static void Bucketsort(Veiculo[] veiculos) {
+        if (veiculos.length == 0) {
+            return;
         }
-        }
+        // 10 buckets
+        Veiculo[][] buckets = new Veiculo[10][veiculos.length];
+        int[] quantidade = new int[10];
 
-    //-- cria os 10 buckets e coloca em uma matriz para bucket[balde que esta][quantidade] --//
-    Veiculo[][] buckets = new Veiculo[10][501];
-
-    // Guarda quantos veículos existem dentro de cada bucket
-    int[] quantidade = new int[10];
-
-    for (int i = 0; i < veiculos.length; i++) {
-        if (veiculos[i] != null) {
-            double cilindrada = h[i];
-        
+        // DISTRIBUIÇÃO
+        for (int i = 0; i < veiculos.length; i++) {
+            double cilindrada = veiculos[i].getCilindrada();
             int indiceBucket = (int)(cilindrada / 0.8);
-        // Caso a cilindrada seja exatamente 8.0
-            if (indiceBucket == 10) {
-            indiceBucket = 9;
+
+            // Caso seja exatamente 8.0
+            if (indiceBucket >= 10) {
+                indiceBucket = 9;
             }
-        
-        // Coloca o VEÍCULO completo no bucket
-        buckets[indiceBucket][quantidade[indiceBucket]] = veiculos[i];
-
-        quantidade[indiceBucket]++;
+            buckets[indiceBucket][quantidade[indiceBucket]]= veiculos[i];
+            quantidade[indiceBucket]++;
         }
-    }
-
-    //-- Insertion Sort dentro de cada bucket --//
-    for (int b = 0; b < 10; b++) {
-        for (int i = 1; i < quantidade[b]; i++) {
-            Veiculo atual = buckets[b][i];
-            int j = i - 1;
-
-            while (j >= 0 &&
-                buckets[b][j].getCilindrada() > atual.getCilindrada()) {
-                buckets[b][j + 1] = buckets[b][j];
-                j--;
+        // INSERTION SORT
+        for (int b = 0; b < 10; b++) {
+            for (int i = 1;i < quantidade[b];i++) {
+                Veiculo atual = buckets[b][i];
+                int j = i - 1;
+                while ( j >= 0 && buckets[b][j].getCilindrada() > atual.getCilindrada()) {
+                    buckets[b][j + 1] = buckets[b][j];
+                    j--;
+                }
+                buckets[b][j + 1] = atual;
             }
-            buckets[b][j + 1] = atual;
+        }
+
+
+        // DEVOLVE AO VETOR
+        int posicao = 0;
+        for (int b = 0; b < 10; b++) {
+            for (int j = 0;j < quantidade[b];j++) {
+                veiculos[posicao] = buckets[b][j];
+                posicao++;
+            }
         }
     }
-
-    //-- Coloca os buckets ordenados de volta em veiculos --//
-    int posicao = 0;
-
-    for (int b = 0; b < 10; b++) {
-        for (int j = 0; j < quantidade[b]; j++) {
-            veiculos[posicao] = buckets[b][j];
-            posicao++;
-        }
-    }
-   }
 }

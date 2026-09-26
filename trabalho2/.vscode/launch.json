@@ -3,6 +3,27 @@
   "configurations": [
     {
       "type": "java",
+      "name": "questao7",
+      "request": "launch",
+      "mainClass": "Q7.questao7",
+      "projectName": "Trabalho2_bc10ceb4"
+    },
+    {
+      "type": "java",
+      "name": "questao12",
+      "request": "launch",
+      "mainClass": "questao12",
+      "projectName": "Trabalho2_bc10ceb4"
+    },
+    {
+      "type": "java",
+      "name": "questao13",
+      "request": "launch",
+      "mainClass": "questao13",
+      "projectName": "Trabalho2_bc10ceb4"
+    },
+    {
+      "type": "java",
       "name": "questao9",
       "request": "launch",
       "mainClass": "questao9",
