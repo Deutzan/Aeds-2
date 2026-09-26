@@ -2,35 +2,33 @@ package Q1;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 
 public class questao1{
     public static void main(String [] args){
         Veiculo[] veiculos = LerCSV.ler("java_2/veiculosJ.csv");
         
-        Scanner scan = new Scanner(System.in);
-        int idProcurado;
+        try (Scanner scan = new Scanner(System.in)) {
+            int idProcurado;
 
-        idProcurado = scan.nextInt();
-
-        if (idProcurado != -1) {
-            LerCSV.printCarro(veiculos, idProcurado);
-        }
-
-        while (idProcurado != -1){
-        idProcurado = scan.nextInt();
+            idProcurado = scan.nextInt();
 
             if (idProcurado != -1) {
                 LerCSV.printCarro(veiculos, idProcurado);
             }
-         }
-        scan.close();
+
+            while (idProcurado != -1){
+                idProcurado = scan.nextInt();
+
+                if (idProcurado != -1) {
+                    LerCSV.printCarro(veiculos, idProcurado);
+                }
+            }
+        }
 }
 }
 
 class LerCSV {
-
-
-
 
     public static Veiculo[] ler(String carro) {
 
@@ -40,7 +38,7 @@ class LerCSV {
 
         try {
             // Abre o arquivo para leitura.
-            BufferedReader arquivo = new BufferedReader(new FileReader(carro));
+            try (BufferedReader arquivo = new BufferedReader(new FileReader(carro))) {
 
             arquivo.readLine();
 
@@ -56,12 +54,12 @@ class LerCSV {
                 quantidade++;
             }
 
-            arquivo.close();
+            }
 
-        } catch (Exception e) {
+        } catch (IOException | NumberFormatException | ArrayIndexOutOfBoundsException e) {
 
             System.out.println("Erro ao ler o arquivo.");
-            e.printStackTrace(); //--> recomendação para caso caia na exceção ele mostre oque esta realmente acontecendo --//
+            System.err.println("Detalhes do erro: " + e.getMessage());
         }
 
         return veiculos;
@@ -70,11 +68,11 @@ class LerCSV {
 
     public static void printCarro(Veiculo[] veiculos, int id) {
 
-        for (int i = 0; i < veiculos.length; i++) {
+        for (Veiculo veiculo : veiculos) {
 
-            if (veiculos[i] != null && veiculos[i].getId() == id) {
+            if (veiculo != null && veiculo.getId() == id) {
 
-                System.out.println(veiculos[i].format());
+                System.out.println(veiculo.format());
                 return;
             }
         }

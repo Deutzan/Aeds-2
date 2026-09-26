@@ -3,6 +3,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "questao9",
+      "request": "launch",
+      "mainClass": "Q9.questao9",
+      "projectName": "Aeds-2_5dd4062"
+    },
+    {
+      "type": "java",
+      "name": "questao4",
+      "request": "launch",
+      "mainClass": "Q4.questao4",
+      "projectName": "Aeds-2_5dd4062"
+    },
+    {
+      "type": "java",
       "name": "Troca",
       "request": "launch",
       "mainClass": "Troca",

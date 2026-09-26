@@ -62,7 +62,6 @@ class LerCSV {
     }
 }
 
-
 //Data
 class Data{
     private int dia;

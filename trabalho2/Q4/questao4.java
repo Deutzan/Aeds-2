@@ -1,8 +1,8 @@
-package Q3;
+package Q4;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-public class questao3{
+public class questao4 {
     public static void main(String[] args) {
 
         //-- Lê todos os veículos do arquivo CSV --//
@@ -13,6 +13,7 @@ public class questao3{
 }
 }
 
+//lerCSV
 class LerCSV {
 
     public static Veiculo[] ler(String carro) {
@@ -53,7 +54,7 @@ class LerCSV {
 
     public static void printCarro(Veiculo[] veiculos) {
 
-        for (int i = 0; i < veiculos.length; i++) {
+        for(int i = 0; i < veiculos.length; i++) {
             if (veiculos[i] != null) {
                 System.out.println(veiculos[i].format());
             }
@@ -61,6 +62,8 @@ class LerCSV {
     }
 }
 
+
+//Data
 class Data{
     private int dia;
     private int mes;
@@ -97,7 +100,7 @@ class Data{
     public int getAno(){
         return ano;
     }
-    public void setdia(int ano){
+    public void setAno(int ano){
         this.ano = ano;
     }
 
@@ -120,6 +123,7 @@ class Data{
 
 }
 
+//Veiculo
 class Veiculo {
 //-- atributos --//
 private int id;
@@ -139,7 +143,7 @@ private boolean turbo;
 private Data data_registro;
 
 //-- construtor --//
-public Veiculo(int id, String marca, String modelo, int ano, String categoria, String combustivel, int cilindros, double cilindrada, String transmissao, String tracao, float consumo_cidade, float consumo_estrada, float co2, boolean turbo, Data data_registro) {
+public Veiculo(int id, String marca, String modelo, int ano, String categoria, String combustivel, int cilindros, double cilindrada, String transmissao, String tracao, double consumo_cidade, double consumo_estrada, double co2, boolean turbo, Data data_registro) {
     this.id = id;
     this.marca = marca;
     this.modelo = modelo;
@@ -277,9 +281,9 @@ public Veiculo(int id, String marca, String modelo, int ano, String categoria, S
         double cilindrada = Double.parseDouble(dados[7]);
         String transmissao = dados[8];
         String tracao = dados[9];
-        float consumoCidade = Float.parseFloat(dados[10]);
-        float consumoEstrada = Float.parseFloat(dados[11]);
-        float co2 = Float.parseFloat(dados[12]);
+        double consumoCidade = Double.parseDouble(dados[10]);
+        double consumoEstrada = Double.parseDouble(dados[11]);
+        double co2 = Double.parseDouble(dados[12]);
         boolean turbo = Boolean.parseBoolean(dados[13]);
 
         // Chama o ParseData para transformar a data
