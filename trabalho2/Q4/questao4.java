@@ -6,7 +6,7 @@ public class questao4 {
     public static void main(String[] args) {
 
         //-- Lê todos os veículos do arquivo CSV --//
-        Veiculo[] veiculos = LerCSV.ler("java_2/veiculosJ.csv");
+        Veiculo[] veiculos = LerCSV.ler("veiculosJ.csv");
         
         Veiculo.Insertsort(veiculos);
         LerCSV.printCarro(veiculos);

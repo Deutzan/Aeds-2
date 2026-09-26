@@ -4,7 +4,7 @@ public class questao9 {
 
     public static void main(String[] args) {
 
-        Veiculo[] veiculos = LerCSV.ler("java_2/veiculosJ.csv");
+        Veiculo[] veiculos = LerCSV.ler("veiculosJ.csv");
 
         Lista lista = new Lista(1000);
 
@@ -701,8 +701,7 @@ class LerCSV {
 
         try {
 
-            Scanner arquivo =
-                new Scanner(new java.io.File(caminho));
+            Scanner arquivo = new Scanner(new java.io.File(caminho));
 
             // Pular cabeçalho
             if (arquivo.hasNextLine()) {

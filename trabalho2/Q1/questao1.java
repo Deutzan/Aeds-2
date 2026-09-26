@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class questao1{
     public static void main(String [] args){
-        Veiculo[] veiculos = LerCSV.ler("java_2/veiculosJ.csv");
+        Veiculo[] veiculos = LerCSV.ler("veiculosJ.csv");
         
         try (Scanner scan = new Scanner(System.in)) {
             int idProcurado;

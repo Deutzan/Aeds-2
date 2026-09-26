@@ -192,7 +192,7 @@ void formatVeiculo(Veiculos v, char* buffer) {
 int main() {
     int n;
 
-    Veiculos* veiculos = LerCSV("java_2/veiculosJ.csv",&n);
+    Veiculos* veiculos = LerCSV("veiculosJ.csv",&n);
 
     if (veiculos == NULL) {
         return 1;

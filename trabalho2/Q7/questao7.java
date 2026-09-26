@@ -5,7 +5,7 @@ import java.io.FileReader;
 
 public class questao7 {
     public static void main(String[] args){
-        Veiculo[] veiculos = LerCSV.ler("java_2/veiculosJ.csv");
+        Veiculo[] veiculos = LerCSV.ler("veiculosJ.csv");
 
         Veiculo.Bucketsort(veiculos);
         LerCSV.printCarro(veiculos);

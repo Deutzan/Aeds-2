@@ -17,15 +17,15 @@ typedef struct Data {
 
 typedef struct Veiculos {
     int id;
-    char marca[22];
-    char modelo[32];
+    char marca[30];
+    char modelo[40];
     int ano;
-    char categoria[30];
-    char combustivel[9];
+    char categoria[40];
+    char combustivel[30];
     int cilindros;
     double cilindrada;
     char transmissao[22];
-    char tracao[22];
+    char tracao[35];
     double consumo_cidade;
     double consumo_estrada;
     double co2;
@@ -46,6 +46,12 @@ void formatVeiculo(Veiculos v, char* buffer);
 
 void formatData(Data d, char* buffer);
 
+void formatCombustivel(const char* combustivel, char* buffer);
+
+int* LerIds(int* qtdIds);
+
+bool idEstaNaLista(int id, int* ids, int qtdIds);
+
 
 // ==================== LER CSV ====================
 
@@ -54,12 +60,9 @@ Veiculos* LerCSV(char* caminhoArquivo, int* n) {
     FILE* arquivo = fopen(caminhoArquivo, "r");
 
     if (arquivo == NULL) {
-        //printf("ERRO: nao foi possivel abrir o arquivo: %s\n", caminhoArquivo);
         return NULL;
     }
-        //printf("Arquivo aberto com sucesso!\n");
 
-        
     int capacidade = 100;
 
     Veiculos* veiculos = malloc(capacidade * sizeof(Veiculos));
@@ -68,15 +71,13 @@ Veiculos* LerCSV(char* caminhoArquivo, int* n) {
 
     *n = 0;
 
-
     // Ignora o cabeçalho
     fgets(linha, sizeof(linha), arquivo);
 
-
     while (fgets(linha, sizeof(linha), arquivo) != NULL) {
 
-        // Remove o \n
-        linha[strcspn(linha, "\n")] = '\0';
+        // Remove o \n (usando strtok, que é permitido)
+        strtok(linha, "\n");
 
         Veiculos* v = ParseVeiculo(linha);
 
@@ -85,19 +86,12 @@ Veiculos* LerCSV(char* caminhoArquivo, int* n) {
         free(v);
         (*n)++;
 
-
         // Aumenta o vetor se necessário
         if (*n >= capacidade) {
-
             capacidade *= 2;
-
-            veiculos = realloc(
-                veiculos,
-                capacidade * sizeof(Veiculos)
-            );
+            veiculos = realloc(veiculos, capacidade * sizeof(Veiculos));
         }
     }
-
 
     fclose(arquivo);
 
@@ -114,7 +108,7 @@ Veiculos* ParseVeiculo(char* s) {
     char turbo[6];
     char data[11];
 
-    sscanf(s,"%d,%21[^,],%31[^,],%d,%29[^,],%8[^,],%d,%lf,%21[^,],%21[^,],%lf,%lf,%lf,%5[^,],%10[^\n]",
+    sscanf(s,"%d,%29[^,],%39[^,],%d,%39[^,],%29[^,],%d,%lf,%21[^,],%34[^,],%lf,%lf,%lf,%5[^,],%10[^\n]",
 
         &v->id,
         v->marca,
@@ -138,6 +132,41 @@ Veiculos* ParseVeiculo(char* s) {
     return v;
 }
 
+
+// ==================== COMPARAR IGNORANDO MAIUSCULA/MINUSCULA ====================
+
+// Implementação manual (sem depender de strcasecmp, que não é uma função padrão
+// permitida): compara duas strings caractere a caractere, tratando 'A'-'Z' como
+// equivalentes a 'a'-'z'. Retorna <0, 0 ou >0, igual ao strcmp.
+int compararModeloIgnorandoCaixa(const char* a, const char* b) {
+
+    int i = 0;
+
+    while (a[i] != '\0' && b[i] != '\0') {
+
+        char ca = a[i];
+        char cb = b[i];
+
+        if (ca >= 'A' && ca <= 'Z') {
+            ca = ca + ('a' - 'A');
+        }
+        if (cb >= 'A' && cb <= 'Z') {
+            cb = cb + ('a' - 'A');
+        }
+
+        if (ca != cb) {
+            return ca - cb;
+        }
+
+        i++;
+    }
+
+    return a[i] - b[i];
+}
+
+
+// ==================== SELECTION SORT (por modelo) ====================
+
 void selectionSortModelo(Veiculos* veiculos, int n) {
 
     for (int i = 0; i < n - 1; i++) {
@@ -146,7 +175,7 @@ void selectionSortModelo(Veiculos* veiculos, int n) {
 
         for (int j = i + 1; j < n; j++) {
 
-            if (strcmp(veiculos[j].modelo, veiculos[menor].modelo) < 0) {
+            if (compararModeloIgnorandoCaixa(veiculos[j].modelo, veiculos[menor].modelo) < 0) {
                 menor = j;
             }
         }
@@ -174,7 +203,28 @@ Data ParseData(char* s) {
 // ==================== FORMAT DATA ====================
 
 void formatData(Data d, char* buffer) {
-    sprintf(buffer, "%04d/%02d/%02d",d.ano,d.mes,d.dia );
+    // dia/mes/ano
+    sprintf(buffer, "%02d/%02d/%04d", d.dia, d.mes, d.ano);
+}
+
+
+// ==================== FORMAT COMBUSTIVEL ====================
+
+// Transforma "Gasoline;Electricity" em "[Gasoline,Electricity]"
+// e "Gasoline" em "[Gasoline]"
+void formatCombustivel(const char* combustivel, char* buffer) {
+
+    char temp[30];
+    sprintf(temp, "%s", combustivel);
+
+    // Troca ';' por ','
+    for (int i = 0; temp[i] != '\0'; i++) {
+        if (temp[i] == ';') {
+            temp[i] = ',';
+        }
+    }
+
+    sprintf(buffer, "[%s]", temp);
 }
 
 
@@ -183,10 +233,10 @@ void formatData(Data d, char* buffer) {
 void formatVeiculo(Veiculos v, char* buffer) {
 
     char data[30];
+    char combustivelFormatado[35];
 
-
-    formatData(v.data_registro,data);
-
+    formatData(v.data_registro, data);
+    formatCombustivel(v.combustivel, combustivelFormatado);
 
     sprintf(buffer,"[%d ## %s ## %s ## %d ## %s ## %s ## %d ## %.1lf ## %s ## %s ## %.2lf ## %.2lf ## %.1lf ## %s ## %s]",
         v.id,
@@ -194,7 +244,7 @@ void formatVeiculo(Veiculos v, char* buffer) {
         v.modelo,
         v.ano,
         v.categoria,
-        v.combustivel,
+        combustivelFormatado,
         v.cilindros,
         v.cilindrada,
         v.transmissao,
@@ -208,27 +258,86 @@ void formatVeiculo(Veiculos v, char* buffer) {
 }
 
 
+// ==================== LER IDS DIGITADOS ====================
+
+// Lê os ids digitados pelo usuário até encontrar o sentinela -1
+int* LerIds(int* qtdIds) {
+
+    int capacidade = 100;
+
+    int* ids = malloc(capacidade * sizeof(int));
+
+    *qtdIds = 0;
+
+    int id;
+
+    while (scanf("%d", &id) == 1 && id != -1) {
+
+        ids[*qtdIds] = id;
+        (*qtdIds)++;
+
+        if (*qtdIds >= capacidade) {
+            capacidade *= 2;
+            ids = realloc(ids, capacidade * sizeof(int));
+        }
+    }
+
+    return ids;
+}
+
+
+// Verifica se um id está na lista de ids digitados
+bool idEstaNaLista(int id, int* ids, int qtdIds) {
+
+    for (int i = 0; i < qtdIds; i++) {
+        if (ids[i] == id) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 // ==================== MAIN ====================
 
 int main() {
     int n;
 
+    // Lê todos os veículos do CSV
     Veiculos* veiculos = LerCSV("veiculosC.csv", &n);
 
     if (veiculos == NULL) {
         return 1;
     }
 
-    selectionSortModelo(veiculos, n);
+    // Lê os ids digitados (termina em -1)
+    int qtdIds;
+    int* ids = LerIds(&qtdIds);
+
+    // Filtra somente os veículos cujo id foi digitado
+    Veiculos* selecionados = malloc(qtdIds * sizeof(Veiculos));
+    int qtdSelecionados = 0;
 
     for (int i = 0; i < n; i++) {
-        char buffer[500];
+        if (idEstaNaLista(veiculos[i].id, ids, qtdIds)) {
+            selecionados[qtdSelecionados] = veiculos[i];
+            qtdSelecionados++;
+        }
+    }
 
-        formatVeiculo(veiculos[i], buffer);
+    // Ordena apenas os selecionados
+    selectionSortModelo(selecionados, qtdSelecionados);
 
+    // Imprime os selecionados já ordenados
+    for (int i = 0; i < qtdSelecionados; i++) {
+        char buffer[300];
+        formatVeiculo(selecionados[i], buffer);
         printf("%s\n", buffer);
     }
 
     free(veiculos);
+    free(ids);
+    free(selecionados);
     return 0;
 }

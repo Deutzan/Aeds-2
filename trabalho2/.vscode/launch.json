@@ -2,6 +2,20 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "questao4",
+      "request": "launch",
+      "mainClass": "Q4.questao4",
+      "projectName": "Trabalho2_bc10ceb4"
+    },
+    {
+      "type": "java",
+      "name": "questao1",
+      "request": "launch",
+      "mainClass": "Q1.questao1",
+      "projectName": "Trabalho2_bc10ceb4"
+    },
+    {
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
       "request": "launch",
