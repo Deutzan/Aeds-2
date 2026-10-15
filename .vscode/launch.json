@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "q1",
+      "request": "launch",
+      "mainClass": "q1",
+      "projectName": "Aeds-2_ad88b01b"
+    },
+    {
+      "type": "java",
       "name": "Troca",
       "request": "launch",
       "mainClass": "Troca",
