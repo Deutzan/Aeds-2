@@ -315,7 +315,8 @@ class Veiculo {
 
     // Format
     public String format() {
-        String s = String.format("[%d ## %s ## %s ## %d ## %s ## [%s] ## %d ## %.1f ## %s ## %s ## %.2f ## %.2f ## %.1f ## %b ## ",
+
+    String s = String.format("[%d ## %s ## %s ## %d ## %s ## [%s] ## %d ## %.1f ## %s ## %s ## %.2f ## %.2f ## %.1f ## %b ## ",
             id,
             marca,
             modelo,
@@ -369,10 +370,10 @@ class Veiculo {
             cmp = esquerda[i].getCategoria().compareTo(direita[j].getCategoria());
         }
 
-        if (cmp < 0) {
-            veiculos[k++] = esquerda[i++];
-        } else {
-            veiculos[k++] = direita[j++];
+        if (cmp <= 0) {
+    veiculos[k++] = esquerda[i++];
+    } else {
+    veiculos[k++] = direita[j++];
         }
     }
 

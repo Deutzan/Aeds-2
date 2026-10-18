@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.Locale;
 
+// q3
 public class q3 {
 
     public static void main(String[] args) {
@@ -29,6 +30,7 @@ public class q3 {
                 Veiculo veiculo = LerCSV.buscarPorId(todos, id);
 
                 if (veiculo != null && quantidade < selecionados.length) {
+                    veiculo.setOrdemEntrada(quantidade);
                     selecionados[quantidade] = veiculo;
                     quantidade++;
                 }
@@ -158,6 +160,7 @@ class Data {
 
 // Veiculo
 class Veiculo {
+
     private int id;
     private String marca;
     private String modelo;
@@ -173,6 +176,7 @@ class Veiculo {
     private double co2;
     private boolean turbo;
     private Data data_registro;
+    private int ordemEntrada;
 
     public Veiculo(
         int id, String marca, String modelo, int ano,
@@ -196,6 +200,7 @@ class Veiculo {
         this.co2 = co2;
         this.turbo = turbo;
         this.data_registro = data_registro;
+        this.ordemEntrada = 0;
     }
 
     public int getId() {
@@ -258,6 +263,14 @@ class Veiculo {
         return data_registro;
     }
 
+    public int getOrdemEntrada() {
+        return ordemEntrada;
+    }
+
+    public void setOrdemEntrada(int ordemEntrada) {
+        this.ordemEntrada = ordemEntrada;
+    }
+
     public static Veiculo ParseVeiculo(String linha) {
         String[] dados = linha.split(",", -1);
 
@@ -285,29 +298,33 @@ class Veiculo {
     }
 
     public String format() {
+        String combustivelFormatado = combustivel.replace(';', ',');
+
         return String.format(
             Locale.US,
             "[%d ## %s ## %s ## %d ## %s ## [%s] ## %d ## %.1f ## %s ## %s ## %.2f ## %.2f ## %.1f ## %b ## %s]",
-            id, marca, modelo, ano, categoria, combustivel,
+            id, marca, modelo, ano, categoria, combustivelFormatado,
             cilindros, cilindrada, transmissao, tracao,
             consumo_cidade, consumo_estrada, co2, turbo,
             data_registro.format()
         );
     }
 
-    // Compara CO2 em ordem decrescente.
-    // Em caso de empate, compara transmissão em ordem crescente.
+    // CO2 crescente, transmissão crescente e ordem original como desempate.
     public static int comparar(Veiculo a, Veiculo b) {
-        int cmp = Double.compare(b.getCo2(), a.getCo2());
+        int cmp = Double.compare(a.getCo2(), b.getCo2());
 
         if (cmp == 0) {
             cmp = a.getTransmissao().compareTo(b.getTransmissao());
         }
 
+        if (cmp == 0) {
+            cmp = Integer.compare(a.getOrdemEntrada(),b.getOrdemEntrada());
+        }
+
         return cmp;
     }
 
-    // Organiza os elementos para manter a propriedade do heap.
     public static void heapify(Veiculo[] veiculos, int n, int i) {
         int maior = i;
         int esquerda = 2 * i + 1;
@@ -332,15 +349,11 @@ class Veiculo {
         }
     }
 
-    // Ordena usando HeapSort.
     public static void HeapSort(Veiculo[] veiculos, int quantidade) {
-
-        // Constrói o heap.
         for (int i = quantidade / 2 - 1; i >= 0; i--) {
             heapify(veiculos, quantidade, i);
         }
 
-        // Extrai os elementos e ordena o vetor.
         for (int i = quantidade - 1; i > 0; i--) {
             Veiculo temp = veiculos[0];
             veiculos[0] = veiculos[i];
@@ -350,3 +363,4 @@ class Veiculo {
         }
     }
 }
+
