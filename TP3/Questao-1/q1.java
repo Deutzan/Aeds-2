@@ -5,15 +5,15 @@ public class q1 {
 
     public static void main(String[] args) {
 
-        // Lê todos os veículos do arquivo CSV
+// Lê todos os veículos do arquivo CSV
         Veiculo[] todos = LerCSV.ler("/tmp/veiculos.csv");
 
-        // Vetor para armazenar somente os veículos pedidos na entrada
+// Vetor para armazenar somente os veículos pedidos na entrada
         Veiculo[] selecionados = new Veiculo[51];
 
         int quantidade = 0;
 
-        // Lê os IDs até encontrar -1
+// Lê os IDs até encontrar -1
         try {
             BufferedReader entrada = new BufferedReader(new java.io.InputStreamReader(System.in));
 
@@ -40,9 +40,9 @@ public class q1 {
             e.printStackTrace();
         }
 
-        // Ordena somente os veículos selecionados
+// Ordena somente os veículos selecionados
         Veiculo.Mergesort(selecionados,quantidade);
-        // Imprime os veículos
+// Imprime os veículos
         LerCSV.printCarro(selecionados, quantidade);
     }
 }
@@ -58,7 +58,7 @@ class LerCSV {
         try {
             BufferedReader arquivo = new BufferedReader(new FileReader(carro));
 
-            // Ignora o cabeçalho
+// Ignora o cabeçalho
             arquivo.readLine();
 
             String linha;
@@ -78,7 +78,7 @@ class LerCSV {
     }
 
 
-    // Busca um veículo pelo ID
+// Busca um veículo pelo ID
     public static Veiculo buscarPorId(Veiculo[] veiculos, int id) {
         for (int i = 0; i < veiculos.length; i++) {
             if (veiculos[i] != null &&
@@ -90,7 +90,7 @@ class LerCSV {
     }
 
 
-    // Imprime somente a quantidade de veículos selecionados
+// Imprime somente a quantidade de veículos selecionados
     public static void printCarro(Veiculo[] veiculos, int quantidade) {
         for (int i = 0; i < quantidade; i++) {
             if (veiculos[i] != null) {
@@ -149,7 +149,6 @@ class Data {
         int anoData = Integer.parseInt(data[0]);
         int mesData = Integer.parseInt(data[1]);
         int diaData = Integer.parseInt(data[2]);
-        
         return new Data(diaData, mesData, anoData);
     }
 
@@ -274,7 +273,7 @@ class Veiculo {
         return data_registro;
     }
 
-    // Parse do veículo
+// Parse do veículo
     public static Veiculo ParseVeiculo(String linha) {
         String[] dados = linha.split(",",-1);
 
@@ -313,7 +312,7 @@ class Veiculo {
         );
     }
 
-    // Format
+// Format
     public String format() {
 
     String s = String.format("[%d ## %s ## %s ## %d ## %s ## [%s] ## %d ## %.1f ## %s ## %s ## %.2f ## %.2f ## %.1f ## %b ## ",
@@ -337,7 +336,7 @@ class Veiculo {
         return s;
     }
 
-   // Merge Sort 
+// Merge Sort 
     public static void Mergesort(Veiculo[] veiculos, int quantidade){
         if(quantidade < 2){
             return;
