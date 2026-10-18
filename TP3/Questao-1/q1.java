@@ -8,11 +8,22 @@ public class q1 {
 
     public static void main(String[] args) {
 
+<<<<<<< HEAD
         Veiculo[] todos = LerCSV.ler("/tmp/veiculos.csv");
+=======
+// Lê todos os veículos do arquivo CSV
+        Veiculo[] todos = LerCSV.ler("/tmp/veiculos.csv");
+
+// Vetor para armazenar somente os veículos pedidos na entrada
+>>>>>>> quest1
         Veiculo[] selecionados = new Veiculo[51];
 
         int quantidade = 0;
 
+<<<<<<< HEAD
+=======
+// Lê os IDs até encontrar -1
+>>>>>>> quest1
         try {
             BufferedReader entrada = new BufferedReader(
                 new InputStreamReader(System.in)
@@ -41,7 +52,13 @@ public class q1 {
             e.printStackTrace();
         }
 
+<<<<<<< HEAD
         Veiculo.Mergesort(selecionados, quantidade);
+=======
+// Ordena somente os veículos selecionados
+        Veiculo.Mergesort(selecionados,quantidade);
+// Imprime os veículos
+>>>>>>> quest1
         LerCSV.printCarro(selecionados, quantidade);
     }
 }
@@ -58,7 +75,7 @@ class LerCSV {
                 new FileReader(carro)
             );
 
-            // Ignora o cabeçalho
+// Ignora o cabeçalho
             arquivo.readLine();
 
             String linha;
@@ -79,6 +96,11 @@ class LerCSV {
         return veiculos;
     }
 
+<<<<<<< HEAD
+=======
+
+// Busca um veículo pelo ID
+>>>>>>> quest1
     public static Veiculo buscarPorId(Veiculo[] veiculos, int id) {
 
         for (int i = 0; i < veiculos.length; i++) {
@@ -91,6 +113,11 @@ class LerCSV {
         return null;
     }
 
+<<<<<<< HEAD
+=======
+
+// Imprime somente a quantidade de veículos selecionados
+>>>>>>> quest1
     public static void printCarro(Veiculo[] veiculos, int quantidade) {
 
         for (int i = 0; i < quantidade; i++) {
@@ -150,7 +177,10 @@ class Data {
         int anoData = Integer.parseInt(data[0]);
         int mesData = Integer.parseInt(data[1]);
         int diaData = Integer.parseInt(data[2]);
+<<<<<<< HEAD
 
+=======
+>>>>>>> quest1
         return new Data(diaData, mesData, anoData);
     }
 
@@ -273,6 +303,10 @@ class Veiculo {
         return data_registro;
     }
 
+<<<<<<< HEAD
+=======
+// Parse do veículo
+>>>>>>> quest1
     public static Veiculo ParseVeiculo(String linha) {
 
         String[] dados = linha.split(",", -1);
@@ -312,6 +346,10 @@ class Veiculo {
         );
     }
 
+<<<<<<< HEAD
+=======
+// Format
+>>>>>>> quest1
     public String format() {
 
         String s = String.format(
@@ -339,9 +377,15 @@ class Veiculo {
         return s;
     }
 
+<<<<<<< HEAD
     public static void Mergesort(Veiculo[] veiculos, int quantidade) {
 
         if (quantidade < 2) {
+=======
+// Merge Sort 
+    public static void Mergesort(Veiculo[] veiculos, int quantidade){
+        if(quantidade < 2){
+>>>>>>> quest1
             return;
         }
 
