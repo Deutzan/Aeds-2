@@ -312,18 +312,14 @@ class Veiculo {
 
     // CO2 crescente, transmissão crescente e ordem original como desempate.
     public static int comparar(Veiculo a, Veiculo b) {
-        int cmp = Double.compare(a.getCo2(), b.getCo2());
+    int cmp = Double.compare(a.getCo2(), b.getCo2());
 
-        if (cmp == 0) {
-            cmp = a.getTransmissao().compareTo(b.getTransmissao());
-        }
-
-        if (cmp == 0) {
-            cmp = Integer.compare(a.getOrdemEntrada(),b.getOrdemEntrada());
-        }
-
-        return cmp;
+    if (cmp == 0) {
+        cmp = a.getTransmissao().compareTo(b.getTransmissao());
     }
+
+    return cmp;
+}
 
     public static void heapify(Veiculo[] veiculos, int n, int i) {
         int maior = i;
