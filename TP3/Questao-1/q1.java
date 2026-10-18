@@ -9,15 +9,13 @@ public class q1 {
         Veiculo[] todos = LerCSV.ler("/tmp/veiculos.csv");
 
         // Vetor para armazenar somente os veículos pedidos na entrada
-        Veiculo[] selecionados = new Veiculo[50];
+        Veiculo[] selecionados = new Veiculo[51];
 
         int quantidade = 0;
 
         // Lê os IDs até encontrar -1
         try {
-            BufferedReader entrada = new BufferedReader(
-                new java.io.InputStreamReader(System.in)
-            );
+            BufferedReader entrada = new BufferedReader(new java.io.InputStreamReader(System.in));
 
             String linha;
 
@@ -278,7 +276,7 @@ class Veiculo {
 
     // Parse do veículo
     public static Veiculo ParseVeiculo(String linha) {
-        String[] dados = linha.split(",(?=(?:[^\\[]\\[[^\\]]\\])[^\\]]$)");
+        String[] dados = linha.split(",",-1);
 
         int id = Integer.parseInt(dados[0]);
         String marca = dados[1];

@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "q3",
+      "request": "launch",
+      "mainClass": "q3",
+      "projectName": "Aeds-2_ad88b01b"
+    },
+    {
+      "type": "java",
       "name": "q1",
       "request": "launch",
       "mainClass": "q1",
