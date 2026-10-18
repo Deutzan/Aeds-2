@@ -1,39 +1,27 @@
-
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.InputStreamReader;
-import java.util.Locale;
 
 public class q1 {
 
     public static void main(String[] args) {
 
-<<<<<<< HEAD
-        Veiculo[] todos = LerCSV.ler("/tmp/veiculos.csv");
-=======
 // Lê todos os veículos do arquivo CSV
         Veiculo[] todos = LerCSV.ler("/tmp/veiculos.csv");
 
 // Vetor para armazenar somente os veículos pedidos na entrada
->>>>>>> quest1
         Veiculo[] selecionados = new Veiculo[51];
 
         int quantidade = 0;
 
-<<<<<<< HEAD
-=======
 // Lê os IDs até encontrar -1
->>>>>>> quest1
         try {
-            BufferedReader entrada = new BufferedReader(
-                new InputStreamReader(System.in)
-            );
+            BufferedReader entrada = new BufferedReader(new java.io.InputStreamReader(System.in));
 
             String linha;
 
             while ((linha = entrada.readLine()) != null) {
 
-                int id = Integer.parseInt(linha.trim());
+                int id = Integer.parseInt(linha);
 
                 if (id == -1) {
                     break;
@@ -52,17 +40,14 @@ public class q1 {
             e.printStackTrace();
         }
 
-<<<<<<< HEAD
-        Veiculo.Mergesort(selecionados, quantidade);
-=======
 // Ordena somente os veículos selecionados
         Veiculo.Mergesort(selecionados,quantidade);
 // Imprime os veículos
->>>>>>> quest1
         LerCSV.printCarro(selecionados, quantidade);
     }
 }
 
+// LerCSV
 class LerCSV {
 
     public static Veiculo[] ler(String carro) {
@@ -71,15 +56,12 @@ class LerCSV {
         int quantidade = 0;
 
         try {
-            BufferedReader arquivo = new BufferedReader(
-                new FileReader(carro)
-            );
+            BufferedReader arquivo = new BufferedReader(new FileReader(carro));
 
 // Ignora o cabeçalho
             arquivo.readLine();
 
             String linha;
-
             while ((linha = arquivo.readLine()) != null) {
                 Veiculo veiculo = Veiculo.ParseVeiculo(linha);
                 veiculos[quantidade] = veiculo;
@@ -92,34 +74,24 @@ class LerCSV {
             System.out.println("Erro ao ler o arquivo.");
             e.printStackTrace();
         }
-
         return veiculos;
     }
 
-<<<<<<< HEAD
-=======
 
 // Busca um veículo pelo ID
->>>>>>> quest1
     public static Veiculo buscarPorId(Veiculo[] veiculos, int id) {
-
         for (int i = 0; i < veiculos.length; i++) {
             if (veiculos[i] != null &&
                 veiculos[i].getId() == id) {
                 return veiculos[i];
             }
         }
-
         return null;
     }
 
-<<<<<<< HEAD
-=======
 
 // Imprime somente a quantidade de veículos selecionados
->>>>>>> quest1
     public static void printCarro(Veiculo[] veiculos, int quantidade) {
-
         for (int i = 0; i < quantidade; i++) {
             if (veiculos[i] != null) {
                 System.out.println(veiculos[i].format());
@@ -128,17 +100,19 @@ class LerCSV {
     }
 }
 
+// Data
 class Data {
-
     private int dia;
     private int mes;
     private int ano;
+
 
     public Data() {
         this.dia = 0;
         this.mes = 0;
         this.ano = 0;
     }
+
 
     public Data(int dia, int mes, int ano) {
         this.dia = dia;
@@ -171,28 +145,21 @@ class Data {
     }
 
     public static Data ParseDia(String dataRegistro) {
-
         String[] data = dataRegistro.split("-");
-
         int anoData = Integer.parseInt(data[0]);
         int mesData = Integer.parseInt(data[1]);
         int diaData = Integer.parseInt(data[2]);
-<<<<<<< HEAD
-
-=======
->>>>>>> quest1
         return new Data(diaData, mesData, anoData);
     }
 
+
     public String format() {
-        return String.format(
-            Locale.US, "%02d/%02d/%04d", dia, mes, ano
-        );
+        return String.format("%02d/%02d/%04d",dia, mes,ano);
     }
 }
 
+// Veiculo
 class Veiculo {
-
     private int id;
     private String marca;
     private String modelo;
@@ -208,6 +175,7 @@ class Veiculo {
     private double co2;
     private boolean turbo;
     private Data data_registro;
+
 
     public Veiculo(
         int id,
@@ -226,6 +194,7 @@ class Veiculo {
         boolean turbo,
         Data data_registro
     ) {
+
         this.id = id;
         this.marca = marca;
         this.modelo = modelo;
@@ -242,6 +211,7 @@ class Veiculo {
         this.turbo = turbo;
         this.data_registro = data_registro;
     }
+
 
     public int getId() {
         return id;
@@ -303,13 +273,9 @@ class Veiculo {
         return data_registro;
     }
 
-<<<<<<< HEAD
-=======
 // Parse do veículo
->>>>>>> quest1
     public static Veiculo ParseVeiculo(String linha) {
-
-        String[] dados = linha.split(",", -1);
+        String[] dados = linha.split(",",-1);
 
         int id = Integer.parseInt(dados[0]);
         String marca = dados[1];
@@ -346,15 +312,10 @@ class Veiculo {
         );
     }
 
-<<<<<<< HEAD
-=======
 // Format
->>>>>>> quest1
     public String format() {
 
-        String s = String.format(
-            Locale.US,
-            "[%d ## %s ## %s ## %d ## %s ## [%s] ## %d ## %.1f ## %s ## %s ## %.2f ## %.2f ## %.1f ## %b ## ",
+    String s = String.format("[%d ## %s ## %s ## %d ## %s ## [%s] ## %d ## %.1f ## %s ## %s ## %.2f ## %.2f ## %.1f ## %b ## ",
             id,
             marca,
             modelo,
@@ -370,82 +331,57 @@ class Veiculo {
             co2,
             turbo
         );
-
         s += data_registro.format();
         s += "]";
-
         return s;
     }
 
-<<<<<<< HEAD
-    public static void Mergesort(Veiculo[] veiculos, int quantidade) {
-
-        if (quantidade < 2) {
-=======
 // Merge Sort 
     public static void Mergesort(Veiculo[] veiculos, int quantidade){
         if(quantidade < 2){
->>>>>>> quest1
             return;
         }
-
-        int meio = quantidade / 2;
-
+        int meio = quantidade/2;
         Veiculo[] esquerda = new Veiculo[meio];
         Veiculo[] direita = new Veiculo[quantidade - meio];
 
-        for (int i = 0; i < meio; i++) {
+        for(int i = 0; i < meio; i++){
             esquerda[i] = veiculos[i];
         }
-
-        for (int i = meio; i < quantidade; i++) {
+        for(int i = meio; i < quantidade; i++){
             direita[i - meio] = veiculos[i];
         }
 
         Mergesort(esquerda, meio);
         Mergesort(direita, quantidade - meio);
-
         merge(veiculos, esquerda, direita, meio, quantidade - meio);
     }
+    public static void merge(Veiculo[] veiculos, Veiculo[] esquerda, Veiculo[] direita,
+    int TamEsquerda, int TamDireita) {
 
-    public static void merge(
-        Veiculo[] veiculos,
-        Veiculo[] esquerda,
-        Veiculo[] direita,
-        int TamEsquerda,
-        int TamDireita
-    ) {
+    int i = 0, j = 0, k = 0;
 
-        int i = 0;
-        int j = 0;
-        int k = 0;
+    while (i < TamEsquerda && j < TamDireita) {
 
-        while (i < TamEsquerda && j < TamDireita) {
+        int cmp = Double.compare(esquerda[i].getConsumo_cidade(),direita[j].getConsumo_cidade());
 
-            int cmp = Double.compare(
-                esquerda[i].getConsumo_cidade(),
-                direita[j].getConsumo_cidade()
-            );
-
-            if (cmp == 0) {
-                cmp = esquerda[i].getCategoria().compareTo(
-                    direita[j].getCategoria()
-                );
-            }
-
-            if (cmp <= 0) {
-                veiculos[k++] = esquerda[i++];
-            } else {
-                veiculos[k++] = direita[j++];
-            }
+        if (cmp == 0) {
+            cmp = esquerda[i].getCategoria().compareTo(direita[j].getCategoria());
         }
 
-        while (i < TamEsquerda) {
-            veiculos[k++] = esquerda[i++];
-        }
-
-        while (j < TamDireita) {
-            veiculos[k++] = direita[j++];
+        if (cmp <= 0) {
+    veiculos[k++] = esquerda[i++];
+    } else {
+    veiculos[k++] = direita[j++];
         }
     }
+
+    while (i < TamEsquerda) {
+        veiculos[k++] = esquerda[i++];
+    }
+
+    while (j < TamDireita) {
+        veiculos[k++] = direita[j++];
+    }
+}
 }
