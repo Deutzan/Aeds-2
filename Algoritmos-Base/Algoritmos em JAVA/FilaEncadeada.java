@@ -8,7 +8,9 @@ class FilaEncadeada{
     fila.Inserir(5);
     fila.Inserir(9);
     fila.Inserir(1);
+    System.out.println(fila.RemoverInicio());
     System.out.println(fila.RemoverUltimo());
+    System.out.println(fila.RemoverPos(2));
     fila.Mostrar();
 
 
@@ -74,6 +76,23 @@ class Fila{
         tmp.prox = tmp = null;
         return resp;
     }
+
+    public int RemoverPos(int pos) throws Exception {
+        if (primeiro == ultimo || pos < 0) {
+            throw new Exception("Erro ao remover!");
+        }
+        Celula tmp = primeiro;
+        for(int i = 0; i < pos && tmp != null; i++){
+            tmp = tmp.prox;
+        }
+        if(tmp == null || tmp.prox == null){
+            throw new Exception("Erro ao remover!");
+        }
+        int resp = tmp.prox.elemento;
+        tmp.prox = tmp.prox.prox;
+        return resp;
+    }
+
 
     public void Mostrar(){
         Celula tmp = primeiro.prox;
