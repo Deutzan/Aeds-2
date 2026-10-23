@@ -1,16 +1,15 @@
 
 class FilaEncadeada{
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
     
     Fila fila = new Fila();
     
     fila.Inserir(2);
-    fila.Inserir(4);
-    fila.Inserir(6);
-    fila.Inserir(8);
-
+    fila.Inserir(5);
+    fila.Inserir(9);
+    fila.Inserir(1);
+    System.out.println(fila.RemoverUltimo());
     fila.Mostrar();
-
 
 
     }                   
@@ -80,7 +79,11 @@ class Fila{
         Celula tmp = primeiro.prox;
         System.out.print("Fila: ");
         while(tmp != null){
-            System.out.print("[" + tmp.elemento + "]--> ");
+            if(tmp.prox == null){
+                System.out.print("[" + tmp.elemento + "]--> NULL");     
+            }else{
+                System.out.print("[" + tmp.elemento + "]--> ");
+            }
             tmp = tmp.prox; 
         }
         System.out.println();
