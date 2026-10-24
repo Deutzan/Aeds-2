@@ -33,6 +33,4 @@ for(i = 0;i < tamanho;i++){
 	
 fgets(palavra,n,stdin);
 }
-//I Main
-//v 
 }
